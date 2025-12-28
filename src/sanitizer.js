@@ -114,14 +114,14 @@ const RESERVED_KEYWORDS = [
 // export function sanitizeText(text) {
 //   let sanitized = text;
 
-//   // 1️⃣ Sanitize technical patterns first (emails, urls, phones)
+//   // Sanitize technical patterns first (emails, urls, phones)
 //   RESERVED_PATTERNS.forEach((pattern) => {
 //     sanitized = sanitized.replace(pattern, (match) =>
 //       sanitizeWord(match)
 //     );
 //   });
 
-//   // 2️⃣ Sanitize reserved keywords even inside other words
+//   // Sanitize reserved keywords even inside other words
 //   RESERVED_KEYWORDS.forEach((keyword) => {
 //     const regex = new RegExp(keyword, "gi");
 
@@ -148,7 +148,6 @@ const URL_REGEX =
 
 /**
  * Insert "_" after first character
- * contact → c_ontact
  */
 function sanitizeWord(word) {
   if (!word || word.length < 2) return word;

@@ -17,11 +17,11 @@ body {
 
 .card {
   width: 100%;
-  max-width: 520px;
+  max-width: 900px;
   background: #ffffff;
-  border-radius: 16px;
-  padding: 28px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  border-radius: 18px;
+  padding: 32px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
@@ -45,7 +45,7 @@ h1 {
 
 .textarea {
   width: 100%;
-  min-height: 110px;
+  min-height: 180px;
   padding: 12px;
   border-radius: 10px;
   border: 1px solid #d1d5db;
@@ -76,12 +76,13 @@ h1 {
 .preview {
   margin-top: 6px;
   padding: 12px;
-  min-height: 80px;
+  min-height: 180px;
+  line-height: 1.6;
   border-radius: 10px;
-  background: #f9fafb;
   border: 1px dashed #d1d5db;
   font-size: 14px;
   color: #374151;
+  background: linear-gradient(180deg, #f9fafb, #ffffff);
 }
 
 .button {
@@ -110,6 +111,7 @@ h1 {
 
 .preview-header {
   margin-top: 16px;
+  margin-bottom: 6px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -199,15 +201,6 @@ h1 {
 
 /* Other CSS */
 
-.card {
-  width: 100%;
-  max-width: 900px;
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 32px;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.1);
-}
-
 .header {
   margin-bottom: 24px;
 }
@@ -246,28 +239,6 @@ h1 {
 
 .column.msg {
   margin-top: 16px;
-}
-
-.textarea {
-  min-height: 180px;
-}
-
-.preview {
-  min-height: 180px;
-  line-height: 1.6;
-}
-
-/* Preview emphasis */
-.preview {
-  background: linear-gradient(180deg, #f9fafb, #ffffff);
-}
-
-/* Actions alignment */
-.preview-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 6px;
 }
 
 /* Save button spacing */
