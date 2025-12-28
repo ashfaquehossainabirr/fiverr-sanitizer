@@ -231,6 +231,10 @@ h1 {
   .grid {
     grid-template-columns: 1fr;
   }
+
+  .column.msg {
+    margin-top: 0;
+  }
 }
 
 .column {
@@ -239,7 +243,7 @@ h1 {
 }
 
 .column.msg {
-  margin-top: 50px;
+  margin-top: 20px;
 }
 
 .textarea {
