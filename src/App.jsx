@@ -1,32 +1,66 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { sanitizeText, containsRestrictedContent } from "./sanitizer";
 
 export default function App() {
   const [message, setMessage] = useState("");
   const [copied, setCopied] = useState(false);
 
-  const hasRestricted = containsRestrictedContent(message);
   const sanitizedMessage = sanitizeText(message);
+  const hasRestricted = containsRestrictedContent(message);
+
+  const saveAsTextFile = (content) => {
+    if (!content) return;
+
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "fiverr-message-preview.txt";
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
 
   const handleCopy = async () => {
     if (!sanitizedMessage) return;
+    await navigator.clipboard.writeText(sanitizedMessage);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
-    try {
-      await navigator.clipboard.writeText(sanitizedMessage);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error("Copy failed", err);
+  const translateToBangla = () => {
+    const select = document.querySelector(".goog-te-combo");
+    if (select) {
+      select.value = "bn";
+      select.dispatchEvent(new Event("change"));
     }
   };
+
+  // Hide Google UI junk
+  useEffect(() => {
+    const style = document.createElement("style");
+    style.innerHTML = `
+      .goog-te-banner-frame,
+      .goog-logo-link,
+      .goog-te-gadget {
+        display: none !important;
+      }
+      body { top: 0 !important; }
+    `;
+    document.head.appendChild(style);
+  }, []);
 
   return (
     <div className="app-container">
       <div className="card">
         <h1>Fiverr Message Sanitizer</h1>
         <p className="subtitle">
-          Restricted keywords are neutralized using hyphens to keep your Fiverr
-          messages compliant.
+          Sanitize restricted keywords and translate safely to Bengali for Fiverr
+          communication.
         </p>
 
         <label className="label">Your Message</label>
@@ -46,22 +80,35 @@ export default function App() {
         <div className="preview-header">
           <label className="label">Sanitized Preview</label>
 
-          <button
-            className={`copy-btn ${copied ? "copied" : ""}`}
-            onClick={handleCopy}
-            disabled={!sanitizedMessage}
-          >
-            {copied ? "✓ Copied" : "Copy"}
-          </button>
+          <div className="actions">
+            <button
+              className={`copy-btn ${copied ? "copied" : ""}`}
+              onClick={handleCopy}
+            >
+              {copied ? "✓ Copied" : "Copy"}
+            </button>
+
+            <button
+              className="translate-btn"
+              onClick={translateToBangla}
+              disabled={!sanitizedMessage}
+            >
+              🌐 Translate to Bangla
+            </button>
+          </div>
         </div>
 
-        <div className="preview">
+        <div className="preview translate-area">
           {sanitizedMessage || "Nothing to preview yet."}
         </div>
 
-        {/* <button className="button" disabled={!message}>
-          Submit Safely
-        </button> */}
+        <button
+              className="save-btn"
+              onClick={() => saveAsTextFile(sanitizedMessage)}
+              disabled={!sanitizedMessage}
+            >
+              💾 Save as .txt
+        </button>
       </div>
     </div>
   );
