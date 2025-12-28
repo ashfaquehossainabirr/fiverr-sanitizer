@@ -44,8 +44,10 @@
 
 //--> sanitize with '_'
 
+// sanitizer.js
+
 export const RESERVED_PATTERNS = [
-  // Emails
+  // Emails (actual email addresses)
   /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,
 
   // Phone numbers
@@ -56,17 +58,24 @@ export const RESERVED_PATTERNS = [
   /\bwww\.[^\s]+/gi,
   /\b[a-z0-9-]+\.(com|net|org|io|co|me|info)\b/gi,
 
-  // Communication platforms
+  // Communication & social platforms
   /\b(whatsapp|telegram|skype|zoom|discord|wechat|signal)\b/gi,
   /\b(instagram|facebook|linkedin|twitter|x|tiktok)\b/gi,
+
+  // 🔥 Fiverr-sensitive keywords (NEW)
+  /\b(contact|review|paid|pay|payment|email)\b/gi,
 ];
 
 /**
  * Insert "_" after the first character
- * whatsapp → w_hatsapp
+ * Example: payment → p_ayment
  */
 function insertUnderscoreAfterFirstChar(word) {
   if (!word || word.length < 2) return word;
+
+  // Prevent double-sanitizing (e.g. p_ayment)
+  if (word[1] === "_") return word;
+
   return `${word.charAt(0)}_${word.slice(1)}`;
 }
 
