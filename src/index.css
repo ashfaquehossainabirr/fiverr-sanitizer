@@ -235,6 +235,10 @@ h1 {
   .column.msg {
     margin-top: 0;
   }
+
+  .app-container {
+    padding: 0 20px;
+  }
 }
 
 .column {
