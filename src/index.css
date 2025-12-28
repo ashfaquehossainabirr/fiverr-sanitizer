@@ -238,8 +238,8 @@ h1 {
   flex-direction: column;
 }
 
-.column .msg {
-  margin-top: 20px;
+.column.msg {
+  margin-top: 50px;
 }
 
 .textarea {
