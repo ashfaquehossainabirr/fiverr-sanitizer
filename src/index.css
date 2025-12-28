@@ -195,3 +195,87 @@ h1 {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+.card {
+  width: 100%;
+  max-width: 900px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 32px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.textarea {
+  min-height: 180px;
+}
+
+.preview {
+  min-height: 180px;
+  line-height: 1.6;
+}
+
+/* Preview emphasis */
+.preview {
+  background: linear-gradient(180deg, #f9fafb, #ffffff);
+}
+
+/* Actions alignment */
+.preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+/* Save button spacing */
+.save-btn {
+  margin-top: 16px;
+}
+
+/* Subtle hover lift */
+.copy-btn,
+.translate-btn,
+.save-btn {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.copy-btn:hover:not(:disabled),
+.translate-btn:hover:not(:disabled),
+.save-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
