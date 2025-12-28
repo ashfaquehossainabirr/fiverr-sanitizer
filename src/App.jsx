@@ -127,24 +127,27 @@ export default function App() {
 
         <div className="grid">
           {/* LEFT COLUMN */}
-          <div className="column">
+          <div className="column column-left">
             <label className="label">Your Message</label>
-            <textarea
-              className={`textarea ${hasRestricted ? "error" : ""}`}
-              placeholder="Type your message here..."
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-            />
 
-            {hasRestricted && (
-              <div className="warning">
-                ⚠ Restricted content detected. Use the sanitized version.
-              </div>
-            )}
+            <div className="input-wrap">
+              <textarea
+                className={`textarea ${hasRestricted ? "error" : ""}`}
+                placeholder="Type your message here..."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+              />
+
+              {hasRestricted && (
+                <div className="warning">
+                  ⚠ Restricted content detected. Use the sanitized version.
+                </div>
+              )}
+            </div>
           </div>
 
           {/* RIGHT COLUMN */}
-          <div className="column">
+          <div className="column column-right">
             <div className="preview-header">
               <label className="label">Sanitized Preview</label>
 
@@ -167,19 +170,23 @@ export default function App() {
               </div>
             </div>
 
-            <div className="preview translate-area">
-              {sanitizedMessage || "Nothing to preview yet."}
-            </div>
+            <div className="preview-wrap">
+              <div className="preview translate-area">
+                {sanitizedMessage || "Nothing to preview yet."}
+              </div>
 
-            <button
-              className="save-btn"
-              onClick={() => saveAsTextFile(sanitizedMessage)}
-              disabled={!sanitizedMessage}
-            >
-              💾 Save as .txt
-            </button>
+              <button
+                className="save-btn"
+                onClick={() => saveAsTextFile(sanitizedMessage)}
+                disabled={!sanitizedMessage}
+              >
+                💾 Save as .txt
+              </button>
+            </div>
           </div>
         </div>
+
+
       </div>
     </div>
   );
