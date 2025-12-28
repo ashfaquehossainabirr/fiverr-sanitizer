@@ -161,7 +161,7 @@ export function sanitizeText(text) {
 
   let sanitized = text;
 
-  // 1️⃣ Extract URLs and replace with placeholders
+  // Extract URLs and replace with placeholders
   const urls = [];
   sanitized = sanitized.replace(URL_REGEX, (match) => {
     const placeholder = `__URL_${urls.length}__`;
@@ -169,7 +169,7 @@ export function sanitizeText(text) {
     return placeholder;
   });
 
-  // 2️⃣ Sanitize ONLY whole reserved words (outside URLs)
+  // Sanitize ONLY whole reserved words (outside URLs)
   RESERVED_KEYWORDS.forEach((keyword) => {
     const regex = new RegExp(`\\b${keyword}\\b`, "gi");
     sanitized = sanitized.replace(regex, (match) =>
@@ -177,7 +177,7 @@ export function sanitizeText(text) {
     );
   });
 
-  // 3️⃣ Restore original URLs
+  // Restore original URLs
   urls.forEach((url, index) => {
     sanitized = sanitized.replace(`__URL_${index}__`, url);
   });
