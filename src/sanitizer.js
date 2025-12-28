@@ -44,47 +44,71 @@
 
 //--> sanitize with '_'
 
-// sanitizer.js
+// Reserved keywords (substring detection)
+const RESERVED_KEYWORDS = [
+  "contact",
+  "review",
+  "paid",
+  "pay",
+  "payment",
+  "email",
+  "whatsapp",
+  "telegram",
+  "skype",
+  "zoom",
+  "discord",
+  "wechat",
+  "signal",
+  "instagram",
+  "facebook",
+  "linkedin",
+  "twitter",
+  "tiktok",
+];
 
-export const RESERVED_PATTERNS = [
-  // Emails (actual email addresses)
+// Patterns for technical items
+const RESERVED_PATTERNS = [
+  // Emails
   /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,
 
   // Phone numbers
   /\b(\+?\d{1,4}[\s-]?)?(\(?\d{2,4}\)?[\s-]?)?\d{3,4}[\s-]?\d{3,4}\b/gi,
 
-  // URLs & domains
+  // URLs
   /\bhttps?:\/\/[^\s]+/gi,
   /\bwww\.[^\s]+/gi,
   /\b[a-z0-9-]+\.(com|net|org|io|co|me|info)\b/gi,
-
-  // Communication & social platforms
-  /\b(whatsapp|telegram|skype|zoom|discord|wechat|signal)\b/gi,
-  /\b(instagram|facebook|linkedin|twitter|x|tiktok)\b/gi,
-
-  // Fiverr-sensitive keywords (Updated)
-  /\b(contact|review|paid|pay|payment|email)\b/gi,
 ];
 
 /**
- * Insert "_" after the first character
- * Example: payment → p_ayment
+ * Insert "_" after first character
+ * contact → c_ontact
  */
-function insertUnderscoreAfterFirstChar(word) {
+function sanitizeWord(word) {
   if (!word || word.length < 2) return word;
 
-  // Prevent double-sanitizing (e.g. p_ayment)
+  // prevent double sanitize
   if (word[1] === "_") return word;
 
-  return `${word.charAt(0)}_${word.slice(1)}`;
+  return `${word[0]}_${word.slice(1)}`;
 }
 
 export function sanitizeText(text) {
   let sanitized = text;
 
+  // 1️⃣ Sanitize technical patterns first (emails, urls, phones)
   RESERVED_PATTERNS.forEach((pattern) => {
     sanitized = sanitized.replace(pattern, (match) =>
-      insertUnderscoreAfterFirstChar(match)
+      sanitizeWord(match)
+    );
+  });
+
+  // 2️⃣ Sanitize reserved keywords even inside other words
+  RESERVED_KEYWORDS.forEach((keyword) => {
+    const regex = new RegExp(keyword, "gi");
+
+    sanitized = sanitized.replace(regex, (match) =>
+      sanitizeWord(match)
     );
   });
 
@@ -92,5 +116,10 @@ export function sanitizeText(text) {
 }
 
 export function containsRestrictedContent(text) {
-  return RESERVED_PATTERNS.some((pattern) => pattern.test(text));
+  const keywordRegex = new RegExp(RESERVED_KEYWORDS.join("|"), "i");
+  return (
+    keywordRegex.test(text) ||
+    RESERVED_PATTERNS.some((pattern) => pattern.test(text))
+  );
 }
+
