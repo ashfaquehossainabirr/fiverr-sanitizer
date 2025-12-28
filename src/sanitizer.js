@@ -142,20 +142,9 @@ const RESERVED_KEYWORDS = [
 // }
 
 
-
-// Technical patterns (still full match)
-const RESERVED_PATTERNS = [
-  // Emails
-  /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,
-
-  // Phone numbers
-  /\b(\+?\d{1,4}[\s-]?)?(\(?\d{2,4}\)?[\s-]?)?\d{3,4}[\s-]?\d{3,4}\b/gi,
-
-  // URLs & domains
-  /\bhttps?:\/\/[^\s]+/gi,
-  /\bwww\.[^\s]+/gi,
-  /\b[a-z0-9-]+\.(com|net|org|io|co|me|info)\b/gi,
-];
+// URL detection (strict)
+const URL_REGEX =
+  /\bhttps?:\/\/[^\s]+|\bwww\.[^\s]+|\b[a-z0-9-]+\.(com|net|org|io|co|me|info)\b/gi;
 
 /**
  * Insert "_" after first character
@@ -163,43 +152,49 @@ const RESERVED_PATTERNS = [
  */
 function sanitizeWord(word) {
   if (!word || word.length < 2) return word;
-
-  // Prevent double sanitizing
-  if (word[1] === "_") return word;
-
+  if (word[1] === "_") return word; // prevent double sanitize
   return `${word[0]}_${word.slice(1)}`;
 }
 
 export function sanitizeText(text) {
+  if (!text) return text;
+
   let sanitized = text;
 
-  // 1️⃣ Sanitize technical patterns
-  RESERVED_PATTERNS.forEach((pattern) => {
-    sanitized = sanitized.replace(pattern, (match) =>
+  // 1️⃣ Extract URLs and replace with placeholders
+  const urls = [];
+  sanitized = sanitized.replace(URL_REGEX, (match) => {
+    const placeholder = `__URL_${urls.length}__`;
+    urls.push(match);
+    return placeholder;
+  });
+
+  // 2️⃣ Sanitize ONLY whole reserved words (outside URLs)
+  RESERVED_KEYWORDS.forEach((keyword) => {
+    const regex = new RegExp(`\\b${keyword}\\b`, "gi");
+    sanitized = sanitized.replace(regex, (match) =>
       sanitizeWord(match)
     );
   });
 
-  // 2️⃣ Sanitize ONLY whole reserved words
-  RESERVED_KEYWORDS.forEach((keyword) => {
-    const regex = new RegExp(`\\b${keyword}\\b`, "gi");
-
-    sanitized = sanitized.replace(regex, (match) =>
-      sanitizeWord(match)
-    );
+  // 3️⃣ Restore original URLs
+  urls.forEach((url, index) => {
+    sanitized = sanitized.replace(`__URL_${index}__`, url);
   });
 
   return sanitized;
 }
 
 export function containsRestrictedContent(text) {
+  if (!text) return false;
+
+  // Remove URLs before checking
+  const textWithoutUrls = text.replace(URL_REGEX, "");
+
   const keywordRegex = new RegExp(
     `\\b(${RESERVED_KEYWORDS.join("|")})\\b`,
     "i"
   );
 
-  return (
-    keywordRegex.test(text) ||
-    RESERVED_PATTERNS.some((pattern) => pattern.test(text))
-  );
+  return keywordRegex.test(textWithoutUrls);
 }
