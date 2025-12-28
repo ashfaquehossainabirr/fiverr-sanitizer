@@ -62,7 +62,7 @@ export const RESERVED_PATTERNS = [
   /\b(whatsapp|telegram|skype|zoom|discord|wechat|signal)\b/gi,
   /\b(instagram|facebook|linkedin|twitter|x|tiktok)\b/gi,
 
-  // 🔥 Fiverr-sensitive keywords (NEW)
+  // Fiverr-sensitive keywords (Updated)
   /\b(contact|review|paid|pay|payment|email)\b/gi,
 ];
 
