@@ -84,7 +84,66 @@ const RESERVED_KEYWORDS = [
   "pricing",
 ];
 
-// Patterns for technical items
+// // Patterns for technical items
+// const RESERVED_PATTERNS = [
+//   // Emails
+//   /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,
+
+//   // Phone numbers
+//   /\b(\+?\d{1,4}[\s-]?)?(\(?\d{2,4}\)?[\s-]?)?\d{3,4}[\s-]?\d{3,4}\b/gi,
+
+//   // URLs
+//   /\bhttps?:\/\/[^\s]+/gi,
+//   /\bwww\.[^\s]+/gi,
+//   /\b[a-z0-9-]+\.(com|net|org|io|co|me|info)\b/gi,
+// ];
+
+// /**
+//  * Insert "_" after first character
+//  * contact → c_ontact
+//  */
+// function sanitizeWord(word) {
+//   if (!word || word.length < 2) return word;
+
+//   // prevent double sanitize
+//   if (word[1] === "_") return word;
+
+//   return `${word[0]}_${word.slice(1)}`;
+// }
+
+// export function sanitizeText(text) {
+//   let sanitized = text;
+
+//   // 1️⃣ Sanitize technical patterns first (emails, urls, phones)
+//   RESERVED_PATTERNS.forEach((pattern) => {
+//     sanitized = sanitized.replace(pattern, (match) =>
+//       sanitizeWord(match)
+//     );
+//   });
+
+//   // 2️⃣ Sanitize reserved keywords even inside other words
+//   RESERVED_KEYWORDS.forEach((keyword) => {
+//     const regex = new RegExp(keyword, "gi");
+
+//     sanitized = sanitized.replace(regex, (match) =>
+//       sanitizeWord(match)
+//     );
+//   });
+
+//   return sanitized;
+// }
+
+// export function containsRestrictedContent(text) {
+//   const keywordRegex = new RegExp(RESERVED_KEYWORDS.join("|"), "i");
+//   return (
+//     keywordRegex.test(text) ||
+//     RESERVED_PATTERNS.some((pattern) => pattern.test(text))
+//   );
+// }
+
+
+
+// Technical patterns (still full match)
 const RESERVED_PATTERNS = [
   // Emails
   /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,
@@ -92,7 +151,7 @@ const RESERVED_PATTERNS = [
   // Phone numbers
   /\b(\+?\d{1,4}[\s-]?)?(\(?\d{2,4}\)?[\s-]?)?\d{3,4}[\s-]?\d{3,4}\b/gi,
 
-  // URLs
+  // URLs & domains
   /\bhttps?:\/\/[^\s]+/gi,
   /\bwww\.[^\s]+/gi,
   /\b[a-z0-9-]+\.(com|net|org|io|co|me|info)\b/gi,
@@ -105,7 +164,7 @@ const RESERVED_PATTERNS = [
 function sanitizeWord(word) {
   if (!word || word.length < 2) return word;
 
-  // prevent double sanitize
+  // Prevent double sanitizing
   if (word[1] === "_") return word;
 
   return `${word[0]}_${word.slice(1)}`;
@@ -114,16 +173,16 @@ function sanitizeWord(word) {
 export function sanitizeText(text) {
   let sanitized = text;
 
-  // 1️⃣ Sanitize technical patterns first (emails, urls, phones)
+  // 1️⃣ Sanitize technical patterns
   RESERVED_PATTERNS.forEach((pattern) => {
     sanitized = sanitized.replace(pattern, (match) =>
       sanitizeWord(match)
     );
   });
 
-  // 2️⃣ Sanitize reserved keywords even inside other words
+  // 2️⃣ Sanitize ONLY whole reserved words
   RESERVED_KEYWORDS.forEach((keyword) => {
-    const regex = new RegExp(keyword, "gi");
+    const regex = new RegExp(`\\b${keyword}\\b`, "gi");
 
     sanitized = sanitized.replace(regex, (match) =>
       sanitizeWord(match)
@@ -134,10 +193,13 @@ export function sanitizeText(text) {
 }
 
 export function containsRestrictedContent(text) {
-  const keywordRegex = new RegExp(RESERVED_KEYWORDS.join("|"), "i");
+  const keywordRegex = new RegExp(
+    `\\b(${RESERVED_KEYWORDS.join("|")})\\b`,
+    "i"
+  );
+
   return (
     keywordRegex.test(text) ||
     RESERVED_PATTERNS.some((pattern) => pattern.test(text))
   );
 }
-
