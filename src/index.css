@@ -240,6 +240,7 @@ h1 {
 .column {
   display: flex;
   flex-direction: column;
+  row-gap: 20px;
 }
 
 .column.msg {
