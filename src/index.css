@@ -238,6 +238,10 @@ h1 {
   flex-direction: column;
 }
 
+.column .msg {
+  margin-top: 20px;
+}
+
 .textarea {
   min-height: 180px;
 }

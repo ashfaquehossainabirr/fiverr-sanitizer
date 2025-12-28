@@ -127,7 +127,7 @@ export default function App() {
 
         <div className="grid">
           {/* LEFT COLUMN */}
-          <div className="column">
+          <div className="column msg">
             <label className="label">Your Message</label>
             <textarea
               className={`textarea ${hasRestricted ? "error" : ""}`}
