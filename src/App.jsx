@@ -128,13 +128,15 @@ export default function App() {
         <div className="grid">
           {/* LEFT COLUMN */}
           <div className="column msg">
-            <label className="label">Your Message</label>
-            <textarea
-              className={`textarea ${hasRestricted ? "error" : ""}`}
-              placeholder="Type your message here..."
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-            />
+            <div className="msg-col">
+              <label className="label">Your Message</label>
+              <textarea
+                className={`textarea ${hasRestricted ? "error" : ""}`}
+                placeholder="Type your message here..."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+              />
+            </div>
 
             {hasRestricted && (
               <div className="warning">

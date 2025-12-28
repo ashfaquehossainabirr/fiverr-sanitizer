@@ -232,7 +232,7 @@ h1 {
     grid-template-columns: 1fr;
   }
 
-  .column.msg {
+  .msg-col {
     margin-top: 0;
   }
 
@@ -246,9 +246,12 @@ h1 {
   flex-direction: column;
 }
 
+.msg-col {
+  row-gap: 20px;
+}
+
 .column.msg {
   margin-top: 16px;
-  row-gap: 20px;
 }
 
 .textarea {
